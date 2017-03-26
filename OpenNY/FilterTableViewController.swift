@@ -42,7 +42,6 @@ class FilterTableViewController: UITableViewController {
         if (UserDefaults.standard.string(forKey: "selectedPopulation") != prefferedPopulation ||
             UserDefaults.standard.string(forKey: "selectedCategories") != prefrerredCategories) {
             delegate?.didChangeFilterOptions()
-            
         }
         
         UserDefaults.standard.set(prefferedPopulation, forKey: "selectedPopulation")

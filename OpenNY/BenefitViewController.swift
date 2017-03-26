@@ -7,13 +7,24 @@
 //
 
 import UIKit
+import MessageUI
 
 class BenefitViewController: UIViewController {
     @IBOutlet weak var detailTextView: UITextView!
     @IBOutlet weak var applyButton: UIButton!
     
     @IBAction func didTapApply(_ sender: Any) {
-        print("apply")
+        sendMail()
+    }
+    
+    func sendMail() {
+        guard let benefit = benefit, MFMailComposeViewController.canSendMail() else { return print("Mail services are not available")}
+        let mailVC = MFMailComposeViewController()
+        mailVC.setToRecipients([])
+        mailVC.setSubject(benefit.programName + " " + benefit.programCode)
+        mailVC.setMessageBody(detailTextView.attributedText.string, isHTML: true)
+        
+        present(mailVC, animated: true, completion: nil)
     }
     
     var benefit: SocialBenefit? {
