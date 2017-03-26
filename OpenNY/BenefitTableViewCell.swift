@@ -29,35 +29,32 @@ class BenefitTableViewCell: UITableViewCell {
     
     func expand() {
         expanded = true
-        UIView.animate(withDuration: 0.3) {
-            self.detailsStackView?.isHidden = !self.expanded
-        }
+        self.detailsStackView?.isHidden = !self.expanded
         resizeButton?.setImage(#imageLiteral(resourceName: "expanded"), for: .normal)
     }
     
     func collapse() {
         expanded = false
-        UIView.animate(withDuration: 0.3) {
-            self.detailsStackView?.isHidden = !self.expanded
-        }
+        self.detailsStackView?.isHidden = !self.expanded
         resizeButton?.setImage(#imageLiteral(resourceName: "collapsed"), for: .normal)
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        style()
+        applyStyle()
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.style()
+        self.applyStyle()
     }
     
-    func style() {
+    func applyStyle() {
+        resizeButton?.isHidden = true 
         textView?.tintColor = UINavigationBar.appearance().tintColor
         plainProgramNameLabel?.textColor = UINavigationBar.appearance().tintColor
         resizeButton?.tintColor = UINavigationBar.appearance().tintColor
-        expand()
+        accessoryView?.backgroundColor = UINavigationBar.appearance().tintColor
     }
 
 }

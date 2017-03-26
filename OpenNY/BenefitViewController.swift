@@ -10,6 +10,11 @@ import UIKit
 
 class BenefitViewController: UIViewController {
     @IBOutlet weak var detailTextView: UITextView!
+    @IBOutlet weak var applyButton: UIButton!
+    
+    @IBAction func didTapApply(_ sender: Any) {
+        print("apply")
+    }
     
     var benefit: SocialBenefit? {
         didSet {
@@ -22,13 +27,16 @@ class BenefitViewController: UIViewController {
         
         detailTextView.tintColor = UINavigationBar.appearance().tintColor
         
+        applyButton.backgroundColor  = UINavigationBar.appearance().tintColor
+        
         var htmlString = benefit.programDescription
         htmlString += "<br/><br/>"
         htmlString += benefit.howToApplySummary
         htmlString += "<br/><br/>"
         htmlString += "<b>\(benefit.requiredDocuments)</b>"
         htmlString += "<br/>"
-        htmlString += "<i>\(benefit.programCategory) for \(benefit.populationServed)</i>"
+        htmlString += "<a target=\"_blank\" href=\"javascript(void);\">\(benefit.programCategory) for \(benefit.populationServed)</a><br/>"
+        htmlString += "<i>\(benefit.governmentAgency)</i></br>"
         htmlString += "\(benefit.helpSummary)"
         
         detailTextView.attributedText = htmlString.attributedString

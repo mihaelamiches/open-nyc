@@ -17,6 +17,15 @@ class BenefitsTableViewController: UITableViewController {
     var population: [String] = []
     var categories: [String] = []
     
+    var didFetchBenefits: Bool = false {
+        didSet {
+            if didFetchBenefits == true && oldValue == false {
+                print("didFetch")
+                refresh()
+            }
+        }
+    }
+    
     var selectedPopulation: [String] {
         return UserDefaults.standard.string(forKey: "selectedPopulation")?.components(separatedBy: ",") ?? ["Everyone"]
     }
@@ -53,17 +62,13 @@ class BenefitsTableViewController: UITableViewController {
 
         activityIndicator.color = UINavigationBar.appearance().tintColor
         refreshControl?.tintColor = UINavigationBar.appearance().tintColor
-        
         activityIndicator.startAnimating()
         loadData {
-            self.refresh()
+            self.didFetchBenefits = true
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        if benefits.count > 0 {
-            refresh()
-        }
     }
     
     //MARK: - Filtering
@@ -78,6 +83,8 @@ class BenefitsTableViewController: UITableViewController {
         detailViewController.selectedCategories = selectedCategories.count > 0 ? selectedCategories : categories
         detailViewController.selectedPopulationAge = selectedPopulation
         detailViewController.selectedPopulation = Array(Set(selectedPopulation).subtracting(Set(ageGroups)))
+        
+        detailViewController.delegate = self
         
         navigationController?.pushViewController(detailViewController, animated: true)
     }
@@ -119,14 +126,16 @@ class BenefitsTableViewController: UITableViewController {
     }
     
     @IBAction func refresh(_ sender: Any) {
-        refresh()
+        applyFilter()
+        refresh(scrollToTop: true)
     }
     
-    func refresh() {
-        applyFilter()
-
+    func refresh(scrollToTop: Bool = false) {
         DispatchQueue.main.async {
             self.tableView.reloadData()
+            if scrollToTop {
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+            }
             self.refreshControl?.endRefreshing()
             self.activityIndicator.stopAnimating()
         }
@@ -147,19 +156,15 @@ class BenefitsTableViewController: UITableViewController {
         if indexPath.section == 1 {
             cell.textView.attributedText = filteredBenefits[indexPath.row].plainLanguageEligibility.attributedString
             cell.plainProgramNameLabel.text = filteredBenefits[indexPath.row].programName
-            cell.accessoryView?.backgroundColor = UINavigationBar.appearance().tintColor
-            cell.selectionStyle = .none
             cell.accessoryType = .detailButton
         } else {
             cell.plainProgramNameLabel.text = ""
             cell.textView.attributedText = filterHeadline.attributedString
             cell.textView.isUserInteractionEnabled = false
-            cell.selectionStyle = .default
             cell.accessoryType = .none
         }
-        
-        cell.resizeButton?.isHidden = true
-        
+
+        cell.applyStyle()
         return cell
     }
 
@@ -176,10 +181,35 @@ class BenefitsTableViewController: UITableViewController {
             
             detailViewController.benefit = filteredBenefits[indexPath.row]
             navigationController?.pushViewController(detailViewController, animated: true)
-        } else {
-            (tableView.cellForRow(at: indexPath) as? BenefitTableViewCell)?.didTapToResize(self)
-            tableView.reloadSections([indexPath.section], with: .automatic)
         }
     }
     
+    
+    override func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        if indexPath.section == 1 {
+            let backgroundView = UIView()
+            backgroundView.backgroundColor = UINavigationBar.appearance().tintColor.withAlphaComponent(0.5)
+            let cell = tableView.cellForRow(at: indexPath)
+            cell?.backgroundView = backgroundView
+            cell?.contentView.backgroundColor = UINavigationBar.appearance().tintColor.withAlphaComponent(0)
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+        if indexPath.section == 1 {
+            let cell = tableView.cellForRow(at: indexPath)
+            let backgroundView = UIView()
+            backgroundView.backgroundColor = .white
+            cell?.backgroundView = backgroundView
+            cell?.contentView.backgroundColor = .white
+        }
+    }
+}
+
+extension BenefitsTableViewController: FilterTableViewControllerDelegate {
+    func didChangeFilterOptions() {
+        print("filter")
+        applyFilter()
+        refresh(scrollToTop: true)
+    }
 }

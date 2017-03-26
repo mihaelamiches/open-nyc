@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol FilterTableViewControllerDelegate {
+    func didChangeFilterOptions()
+}
+
 class FilterTableViewController: UITableViewController {
     var populationAge: [String] = []
     var aboutPopulation: [String] = []
@@ -16,6 +20,8 @@ class FilterTableViewController: UITableViewController {
     var selectedPopulationAge: [String] = []
     var selectedPopulation: [String] = []
     var selectedCategories: [String] = []
+    
+    var delegate: FilterTableViewControllerDelegate?
     
     func applyFilter(options: [String], selectedOption: String) -> [String] {
         var newOptions = options
@@ -33,8 +39,15 @@ class FilterTableViewController: UITableViewController {
         let prefferedPopulation = (populationAge + selectedPopulation).joined(separator: ",")
         let prefrerredCategories = selectedCategories.joined(separator: ",")
         
+        if (UserDefaults.standard.string(forKey: "selectedPopulation") != prefferedPopulation ||
+            UserDefaults.standard.string(forKey: "selectedCategories") != prefrerredCategories) {
+            delegate?.didChangeFilterOptions()
+            
+        }
+        
         UserDefaults.standard.set(prefferedPopulation, forKey: "selectedPopulation")
         UserDefaults.standard.set(prefrerredCategories, forKey: "selectedCategories")
+    
     }
     
     //MARK: - UITableViewDataSource
@@ -104,6 +117,7 @@ class FilterTableViewController: UITableViewController {
             if selectedCategories == allCategories {
                 selectedCategories.removeAll()
             }
+            
             let option = allCategories[indexPath.row]
             selectedCategories = applyFilter(options: selectedCategories, selectedOption: option)
         default:
