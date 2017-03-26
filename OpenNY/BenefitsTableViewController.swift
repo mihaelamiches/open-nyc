@@ -153,17 +153,21 @@ class BenefitsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "benefitCell") as? BenefitTableViewCell else { fatalError("can't dequeue table view cell") }
         
+        let backgroundView = UIView()
         if indexPath.section == 1 {
             cell.textView.attributedText = filteredBenefits[indexPath.row].plainLanguageEligibility.attributedString
             cell.plainProgramNameLabel.text = filteredBenefits[indexPath.row].programName
             cell.accessoryType = .detailButton
+            backgroundView.backgroundColor = .white
         } else {
             cell.plainProgramNameLabel.text = ""
             cell.textView.attributedText = filterHeadline.attributedString
             cell.textView.isUserInteractionEnabled = false
             cell.accessoryType = .none
+            backgroundView.backgroundColor = UINavigationBar.appearance().tintColor.withAlphaComponent(0.1)
         }
 
+        cell.backgroundView = backgroundView
         cell.applyStyle()
         return cell
     }
