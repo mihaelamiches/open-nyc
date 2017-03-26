@@ -1,0 +1,39 @@
+//
+//  ApplicationError.swift
+//  OpenNY
+//
+//  Created by Mihaela Miches on 3/25/17.
+//  Copyright © 2017 me. All rights reserved.
+//
+
+import UIKit
+
+extension String {
+    var attributedString: NSAttributedString? {
+        return try? NSAttributedString(data: self.data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType], documentAttributes: nil)
+    }
+    
+    var length: Int {
+        return self.characters.count
+    }
+}
+
+
+public protocol Scrappable {
+    init(_ json: [AnyHashable: AnyObject])
+}
+
+
+public typealias ScrapedCallback = (([Scrappable]) -> Void)
+
+//MARK: - ErrorHandling
+public protocol ApplicationErrorType: Error, Scrappable {
+    var userInfo: [AnyHashable: Any] { get }
+}
+
+enum ApplicationError {
+    case invalidUrl(_: String)
+    case invalidIdentifier(_: String)
+    case invalidResponse(_: URLResponse?)
+    case rogue(_: Error?)
+}
