@@ -9,7 +9,7 @@
 import UIKit
 import MessageUI
 
-class BenefitViewController: UIViewController {
+class BenefitViewController: UIViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var detailTextView: UITextView!
     @IBOutlet weak var applyButton: UIButton!
     
@@ -22,7 +22,8 @@ class BenefitViewController: UIViewController {
         let mailVC = MFMailComposeViewController()
         mailVC.setToRecipients([])
         mailVC.setSubject(benefit.programName + " " + benefit.programCode)
-        mailVC.setMessageBody(detailTextView.attributedText.string, isHTML: true)
+        mailVC.setMessageBody("Steps:<br/>" + benefit.howToApplySummary + "<b>" + benefit.requiredDocuments + "</b><br/><i>\(benefit.governmentAgency)</i><br/>" + benefit.helpSummary, isHTML: true)
+        mailVC.mailComposeDelegate = self
         
         present(mailVC, animated: true, completion: nil)
     }
@@ -52,4 +53,9 @@ class BenefitViewController: UIViewController {
         
         detailTextView.attributedText = htmlString.attributedString
     }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        dismiss(animated: true, completion: nil)
+    }
 }
+
