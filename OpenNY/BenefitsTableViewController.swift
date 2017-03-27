@@ -7,7 +7,7 @@
 //
 
 import UIKit
-//import ResearckKit
+import ResearchKit
 
 let ageGroups = ["Youth (14+)", "Seniors", "Pregnant & new parents", "Children (0-13)", "Everyone"]
 
