@@ -4,4 +4,7 @@
    <FileRef
       location = "group:OpenNY.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/ResearchKit/ResearchKit.xcodeproj">
+   </FileRef>
 </Workspace>
