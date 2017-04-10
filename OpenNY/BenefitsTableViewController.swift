@@ -91,13 +91,14 @@ class BenefitsTableViewController: UITableViewController {
     }
     
     func applyFilter() {
-        let prefrerredCategories = selectedCategories.count > 0 ? Set(selectedCategories) : Set(categories)
+        let prefrerredCategories = selectedCategories.filter{$0.length > 0}.count > 0 ? Set(selectedCategories) : Set(categories)
         
         let filtered = benefits.filter { benefit in
             let isServed = Set(benefit.populationServed.components(separatedBy: ",")).intersection(Set(selectedPopulation)).count > 0
             let isInterested = Set(benefit.programCategory.components(separatedBy: ",")).intersection(Set(prefrerredCategories)).count > 0
             
-            return isServed || isInterested
+   
+            return isServed && isInterested
         }
         
         
@@ -109,18 +110,39 @@ class BenefitsTableViewController: UITableViewController {
     //MARK: - Data
 
     func loadData(onCompleted: @escaping ((Void) -> Void)) {
-        Scraper.scrape(socialBenefitsUrl, ofType: SocialBenefit([:])) { (results) in
-            let benefits = results.flatMap{$0 as? SocialBenefit }
+        Scraper.scrape(complaintsUrl) { (results) in
+            let requests311 = results.flatMap{ ServiceRequest($0) }
+            let complaintTypes = Set(requests311.map{$0.complaintType}).sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedDescending }
+            let report = complaintTypes.map { type in
+                (type, requests311.filter { $0.complaintType == type }.count)
+                }.sorted { $0.1 > $1.1 }
+
             
-            let population = benefits.map{$0.populationServed.components(separatedBy: ", ")}.reduce([], { $0 + $1 })
-            let screening = Set(population).sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedDescending }
-            let categories = Set(benefits.map{$0.programCategory}).sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending }
+            let noiseCount = requests311.filter {$0.complaintType.contains("Noise")}.count
+            let typesCount = complaintTypes.filter {$0.contains("Noise")}.count
+            let noise = (noiseCount * 1000)/(requests311.count * 10)
             
-            self.benefits = benefits
-            self.population = screening
-            self.categories = categories
+            print(requests311.count, " requests ", complaintTypes.count - typesCount, " types")
+            print("\(typesCount) kinds and \(noise)% noise related")
+
+            report.forEach { print($0.0, $0.1, "\(Double($0.1 * 1000)/Double(requests311.count * 10))%") }
+        
+          //  Set(benefits.map{$0.description}).forEach{print($0)}
+         //   Set(benefits.map{$0.complaintType}).forEach{print($0, benefits.filter{$0.complaintType == com})}
             
-            self.applyFilter()
+//            let population = benefits.map{$0.populationServed.components(separatedBy: ", ")}.reduce([], { $0 + $1 })
+//            let screening = Set(population).sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedDescending }
+//            let categories = Set(benefits.map{$0.programCategory}).sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending }
+//            
+//            self.benefits = benefits
+//            self.population = screening
+//            self.categories = categories
+//            
+//             let locations = benefits.map{$0.officeLocations}
+//            
+//            print(Set(locations))
+//            
+//            self.applyFilter()
             
             onCompleted()
         }

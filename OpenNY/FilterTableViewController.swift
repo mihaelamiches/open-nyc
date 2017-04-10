@@ -46,7 +46,7 @@ class FilterTableViewController: UITableViewController {
         
         UserDefaults.standard.set(prefferedPopulation, forKey: "selectedPopulation")
         UserDefaults.standard.set(prefrerredCategories, forKey: "selectedCategories")
-    
+        print(prefrerredCategories,prefferedPopulation)
     }
     
     //MARK: - UITableViewDataSource

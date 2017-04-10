@@ -18,13 +18,13 @@ extension String {
     }
 }
 
+public typealias Dictionary = [AnyHashable: AnyObject]
 
 public protocol Scrappable {
-    init(_ json: [AnyHashable: AnyObject])
+    init(_ json: Dictionary)
 }
 
-
-public typealias ScrapedCallback = (([Scrappable]) -> Void)
+public typealias ScrapedCallback = (([Dictionary]) -> Void)
 
 //MARK: - ErrorHandling
 public protocol ApplicationErrorType: Error, Scrappable {
