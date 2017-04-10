@@ -6,7 +6,18 @@
 //  Copyright © 2017 me. All rights reserved.
 //
 
+import Foundation
 import UIKit
+
+extension String {
+    var boolValue: Bool {
+        return NSString(string: self).boolValue
+    }
+    
+    var doubleValue: Double {
+        return NSString(string: self).doubleValue
+    }
+}
 
 extension String {
     var attributedString: NSAttributedString? {

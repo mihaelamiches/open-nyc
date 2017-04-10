@@ -40,9 +40,9 @@ class TableViewController: UITableViewController {
     func loadData(onRefresh: @escaping ((Void) -> Void)) {
        // fetchServiceRequests { onRefresh() }
        // fetchPermittedEvents { onRefresh() }
-        fetchLiteracyPrograms { onRefresh() }
+       // fetchLiteracyPrograms { onRefresh() }
         
-      //  fetchAfterSchoolPrograms { onRefresh() }
+        fetchAfterSchoolPrograms { onRefresh() }
     }
 
     //MARK: - Fetch
@@ -51,7 +51,7 @@ class TableViewController: UITableViewController {
             let literacyPrograms = results.flatMap{ LiteracyProgram($0) }
             self.literacyPrograms = literacyPrograms
             
-            literacyPrograms.forEach { print($0.program, $0.programType, $0.siteName) }
+            literacyPrograms.forEach { print($0.program, $0.gradeLevelAgeGroup,"-----", $0.programType) }
         }
     }
     

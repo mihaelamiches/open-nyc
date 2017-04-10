@@ -13,7 +13,7 @@ struct ServiceRequest: Scrappable {
     let complaintType: String
     let description: String
 
-    let incidentLocation: CLLocation
+    let incidentLocation: CLLocationCoordinate2D
     let locationType: String
     
     let agency: String
@@ -38,7 +38,7 @@ struct ServiceRequest: Scrappable {
         
         let latitude = json["latidude"] as? Double ?? 0
         let longitude = json["longitude"] as? Double ?? 0
-        self.incidentLocation = CLLocation(latitude: latitude, longitude: longitude)
+        self.incidentLocation = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         self.locationType = json["location_type"] as? String ?? ""
         
         self.agency = json["agency"] as? String ?? ""

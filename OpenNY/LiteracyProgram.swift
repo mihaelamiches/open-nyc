@@ -11,7 +11,7 @@ import CoreLocation
 struct LiteracyProgram: Scrappable {
     let siteName: String
     let programType: String
-    let location: CLLocation
+    let location: CLLocationCoordinate2D
     let humanAddress: String
     let agency: String
     let boroughCommunity: String
@@ -27,7 +27,7 @@ struct LiteracyProgram: Scrappable {
         
         let latitude = Double(location["latitude"] as? String ?? "") ?? 0
         let longitude = Double(location["longitude"] as? String ?? "") ?? 0
-        self.location = CLLocation(latitude: latitude, longitude: longitude)
+        self.location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         self.humanAddress = location["human_address"] as? String ?? ""
         
         self.agency = json["agency"] as? String ?? ""
