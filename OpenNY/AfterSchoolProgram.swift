@@ -6,4 +6,10 @@
 //  Copyright © 2017 me. All rights reserved.
 //
 
-import Foundation
+import CoreLocation
+
+struct AfterSchoolProgram: Scrappable {
+    init?(_ json: Dictionary) {
+        
+    }
+}

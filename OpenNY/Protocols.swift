@@ -21,15 +21,10 @@ extension String {
 public typealias Dictionary = [AnyHashable: AnyObject]
 
 public protocol Scrappable {
-    init(_ json: Dictionary)
+    init?(_ json: Dictionary)
 }
 
 public typealias ScrapedCallback = (([Dictionary]) -> Void)
-
-//MARK: - ErrorHandling
-public protocol ApplicationErrorType: Error, Scrappable {
-    var userInfo: [AnyHashable: Any] { get }
-}
 
 enum ApplicationError {
     case invalidUrl(_: String)

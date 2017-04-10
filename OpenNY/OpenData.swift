@@ -8,16 +8,16 @@
 
 import Foundation
 
+public enum OpenDataResource { case permittedEvents, socialBenefits, literacyPrograms, landmarks, serviceRequests, theaters, parks, afterSchool }
+
 let openNYResourceUrl = "https://data.cityofnewyork.us/resource"
 
-enum openDataResource { case permittedEvents, socialBenefits, litergacyPrograms, landmarks, serviceRequests, theaters, parks, afterSchool }
-
-extension openDataResource{
+extension OpenDataResource{
     var identifiers: [String] {
         switch self {
         case .permittedEvents: return ["8end-qv57"]
         case .socialBenefits: return ["ujkp-2x99"]
-        case .litergacyPrograms: return ["h2nh-xgvp","trcd-7zc6","h2pf-4vz5", "vmdh-6fvj"]
+        case .literacyPrograms: return ["h2nh-xgvp","trcd-7zc6","h2pf-4vz5", "vmdh-6fvj"]
         case .landmarks: return ["rb9s-d3m8"]
         case .serviceRequests: return ["fhrw-4uyv"]
         case .theaters: return ["2hzz-95k8"]
@@ -28,7 +28,7 @@ extension openDataResource{
     
     var urls: [URL] {
         get {
-          return self.identifiers.flatMap{ URL(string: "\(openNYResourceUrl)/\($0).json") }
+            return self.identifiers.flatMap{ URL(string: "\(openNYResourceUrl)/\($0).json") }
         }
     }
 }

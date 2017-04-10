@@ -8,13 +8,11 @@
 
 import CoreLocation
 
-let complaintsUrl = "https://data.cityofnewyork.us/resource/fhrw-4uyv.json"
-
 struct ServiceRequest: Scrappable {
     let uniqueKey: String
     let complaintType: String
     let description: String
-    
+
     let incidentLocation: CLLocation
     let locationType: String
     
@@ -27,7 +25,7 @@ struct ServiceRequest: Scrappable {
     let status: String
     let resolution: String
     
-    init(_ json: Dictionary) {
+    init?(_ json: Dictionary) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
         

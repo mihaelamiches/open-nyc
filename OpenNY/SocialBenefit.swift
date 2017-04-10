@@ -58,7 +58,7 @@ struct SocialBenefit: Scrappable {
     
     let officeLocations: String
 
-    init(_ json: Dictionary) {
+    init?(_ json: Dictionary) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
         

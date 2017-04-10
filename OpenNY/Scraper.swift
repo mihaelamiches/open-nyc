@@ -9,15 +9,19 @@
 import Foundation
 
 public struct Scraper {
-    public static func scrape(_ urlString: String, resultsCallback: @escaping ScrapedCallback) {
-        guard let url = URL(string: urlString) else {
-            print(ApplicationError.invalidUrl(urlString))
-            return resultsCallback([])
+    public static func scrape(_ resource: OpenDataResource, callback: @escaping (([Dictionary]) -> Void)) {
+        let dispatchGroup = DispatchGroup()
+        var allResults: [Dictionary] = []
+        
+        resource.urls.forEach { url in
+            dispatchGroup.enter()
+            scrape(url, callback: { results in
+                allResults += results
+                dispatchGroup.leave()
+            })
         }
         
-        scrape(url) { results in
-            resultsCallback(results)
-        }
+        dispatchGroup.notify(queue: DispatchQueue.main) { callback(allResults) }
     }
     
     public static func scrape(_ url: URL, callback: @escaping (([Dictionary]) -> Void)) {
@@ -31,8 +35,18 @@ public struct Scraper {
                 let jsonObjects = raw as? [Dictionary]
                 else { print(ApplicationError.invalidResponse(response)); return callback([]) }
             
-            //print(raw)
             callback(jsonObjects)
         }).resume()
+    }
+    
+    public static func scrape(_ urlString: String, resultsCallback: @escaping ScrapedCallback) {
+        guard let url = URL(string: urlString) else {
+            print(ApplicationError.invalidUrl(urlString))
+            return resultsCallback([])
+        }
+        
+        scrape(url) { results in
+            resultsCallback(results)
+        }
     }
 }
