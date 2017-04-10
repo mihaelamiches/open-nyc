@@ -155,13 +155,11 @@
 			isa = PBXGroup;
 			children = (
 				11E9F0171E9AB1810048B972 /* NYData */,
+				11BE81E11E86D3FB00608DF2 /* Main.storyboard */,
 				11BE82121E86E68F00608DF2 /* BenefitsTableViewController.swift */,
 				11E72C291E8803F800D7B941 /* FilterTableViewController.swift */,
 				11623F361E8745E2004C6157 /* BenefitTableViewCell.swift */,
 				11623F381E87481F004C6157 /* BenefitViewController.swift */,
-				11BE81E11E86D3FB00608DF2 /* Main.storyboard */,
-				11BE82101E86D64B00608DF2 /* Protocols.swift */,
-				11BE820E1E86D5DE00608DF2 /* Scraper.swift */,
 				11BE820B1E86D40500608DF2 /* Supporting Files */,
 			);
 			path = OpenNY;
@@ -199,6 +197,8 @@
 		11E9F0171E9AB1810048B972 /* NYData */ = {
 			isa = PBXGroup;
 			children = (
+				11BE82101E86D64B00608DF2 /* Protocols.swift */,
+				11BE820E1E86D5DE00608DF2 /* Scraper.swift */,
 				11E9F0151E9AACBB0048B972 /* NYOpenData.swift */,
 				11BE820C1E86D42900608DF2 /* SocialBenefit.swift */,
 				11E9F0131E9A9F660048B972 /* PermitedEvent.swift */,
