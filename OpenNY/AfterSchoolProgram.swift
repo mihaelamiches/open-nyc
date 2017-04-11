@@ -16,7 +16,6 @@ struct AfterSchoolProgram: Scrappable {
     let agencyContact: String
     let address: String
     
-    let siteName: String
     let siteAddress: String
     let location: CLLocationCoordinate2D
     
@@ -41,8 +40,7 @@ struct AfterSchoolProgram: Scrappable {
         self.agencyContact = json["agency_tel"] as? String ?? ""
         self.address = "\(json["setting"] as? String ?? "") \(json["address1"] as? String ?? "") \(json["address2"] as? String ?? "")"
         
-        self.siteName = json["site_name"] as? String ?? ""
-        self.siteAddress = "\(json["site_build"] as? String ?? "") \(json["site_stree"] as? String ?? "") \(json["site_borou"] as? String ?? "") \(json["site_zip"] as? String ?? "")"
+        self.siteAddress = "\(json["site_name"] as? String ?? "") \(json["site_build"] as? String ?? "") \(json["site_stree"] as? String ?? "") \(json["site_borou"] as? String ?? "") \(json["site_zip"] as? String ?? "")"
         
         guard let coordinates = (json["the_geom"] as? Dictionary ?? [:])["coordinates"] as? [Double]
             else { return nil }
